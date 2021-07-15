@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width">
 
   <title>The Test Page</title>
-
+<!-- 
   <script type="module">
     document.documentElement.classList.remove('no-js');
     document.documentElement.classList.add('js');
-  </script>
+  </script> -->
 
   <link rel="stylesheet" href="assets/css/styles.css">
-  <link rel="stylesheet" href="assets/css/print.css" media="print">
+  <!-- <link rel="stylesheet" href="assets/css/print.css" media="print"> -->
 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -50,10 +50,52 @@
   <h1>Welcome to the Test Page</h1>
   <p>If you see this, the page is working</p>
   <p><em>Thank You</em></p>
-  <button id="ajaxButton" type="button" onclick="makeRequest('assests/test.xml')">Make a request</button>
+  <button id="ajaxButton" type="button">Make a request</button>
 </div>
   </div>
   <script src="assets/js/xy-polyfill.js" nomodule></script>
-  <script src="assets/js/script.js" type="module"></script>
+  <!-- <script src="assets/js/script.js" type="module"></script> -->
+  <script src="assets/js/script.js"></script>
+
+  <script>
+
+(function() {
+    var httpRequest;
+    document.getElementById("ajaxButton").addEventListener('click', makeRequest);
+
+    function makeRequest() {
+        httpRequest = new XMLHttpRequest();
+
+        if (!httpRequest) {
+            alert('Giving up :( Cannot create an XMLHTTP instance');
+            return false;
+        }
+        httpRequest.onreadystatechange = alertContents;
+        httpRequest.open('GET', 'assets/test.xml');
+        //httpRequest.open('GET', url);
+        httpRequest.send();
+    }
+
+    function alertContents() {
+        try {
+          if (httpRequest.readyState === XMLHttpRequest.DONE) {
+            if (httpRequest.status === 200) {
+                var xmldoc = httpRequest.responseXML;
+                var root_node = xmldoc.getElementsByTagName('root').item(0);
+                alert(root_node.firstChild.data);
+            } else {
+              alert('There was a problem with the request.');
+            }
+          }
+        }
+        catch( e ) {
+          alert('Caught Exception: ' + e.description);
+        }
+    }
+      
+})();
+  
+  </script>
+
 </body>
 </html>
